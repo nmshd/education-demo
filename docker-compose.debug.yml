@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - demo_mongo_data:/data/db
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: Pa55w0rd
+    volumes:
+      - ./config/keycloak.conf:/opt/keycloak/conf/keycloak.conf:ro
+    command: start-dev
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+
+volumes:
+  demo_mongo_data:
+  postgres_data:

@@ -1,0 +1,34 @@
+version: "3.7"
+
+services:
+  website-demo:
+    build:
+      dockerfile: Dockerfile.debug
+      context: .
+    entrypoint: npm run dev --workspace packages/demo-frontend
+    container_name: website-demo
+    ports:
+      - 2901:2999
+      - 35727:35727
+    volumes:
+      - ./:/usr/app/
+    restart: always
+    depends_on:
+      - mongodb
+      - connector-demo
+      - keycloak
+    environment:
+      - NODE_CONFIG_ENV=development_demo
+
+  connector-demo:
+    container_name: connector-demo
+    image: ghcr.io/nmshd/connector:3.2.0
+    environment:
+      CUSTOM_CONFIG_LOCATION: "/config.json"
+      logging__appenders__console__level: "TRACE"
+    ports:
+      - 8012:80
+    volumes:
+      - ./config/connector-demo-config.json:/config.json:RO
+    depends_on:
+      - mongodb

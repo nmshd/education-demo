@@ -1,0 +1,23 @@
+image: docker/compose
+options:
+  docker: true
+
+pipelines:
+  branches:
+    "main":
+      - step:
+          name: build + publish
+          caches:
+            - docker
+          script:
+            - docker login -u docker_user -p $DOCKER_PASSWORD dockerhub.js-soft.com
+            - docker build -t dockerhub.js-soft.com/nmshd-login-demo .
+            - docker push dockerhub.js-soft.com/nmshd-login-demo
+    "**":
+      - step:
+          name: lint
+          image: node:lts
+          script:
+            - npm install
+            - npm run lint
+            - npm run build

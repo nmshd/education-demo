@@ -1,0 +1,25 @@
+{
+  "ignorePatterns": ["/*", "!/packages", "/packages/*/*", "!/packages/*/src"],
+  "parser": "@typescript-eslint/parser",
+  "extends": ["@js-soft/ts"],
+  "parserOptions": {
+    "project": ["./packages/*/tsconfig.json"],
+
+    "extraFileExtensions": [".svelte"]
+  },
+  "plugins": ["svelte3", "@typescript-eslint"],
+  "overrides": [
+    {
+      "files": ["*.svelte"],
+      "processor": "svelte3/svelte3"
+    }
+  ],
+  "settings": {
+    "svelte3/typescript": true
+  },
+  "rules": {
+    "no-console": "off",
+    "no-alert": "off",
+    "unused-export-let": "off"
+  }
+}

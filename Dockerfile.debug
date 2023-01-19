@@ -1,0 +1,7 @@
+FROM node:lts
+
+WORKDIR /usr/app
+
+ENV NODE_CONFIG_ENV=development
+
+ENTRYPOINT [ "npm", "run", "dev" ]

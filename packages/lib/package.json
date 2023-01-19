@@ -1,0 +1,40 @@
+{
+  "name": "@js-soft/nmshd-login-demo-helper",
+  "private": true,
+  "keywords": [
+    "svelte"
+  ],
+  "main": "dist/helper.js",
+  "module": "dist/helper.es.js",
+  "jsnext:main": "dist/helper.es.js",
+  "types": "src/index.d.ts",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "axios": "^0.26.0",
+    "svelte-spa-router": "^3.2.0",
+    "sveltestrap": "^5.9.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-typescript": "^8.2.1",
+    "@tsconfig/svelte": "^2.0.1",
+    "autoprefixer": "^9.8.6",
+    "rollup": "^2.51.1",
+    "rollup-plugin-svelte": "^7.1.0",
+    "rollup-plugin-terser": "^6.1.0",
+    "svelte": "^3.38.2",
+    "svelte-check": "^2.1.0",
+    "svelte-preprocess": "^4.7.3",
+    "typescript": "^4.3.2"
+  },
+  "svelte": "src/index.js"
+}
