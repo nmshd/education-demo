@@ -1,5 +1,4 @@
 <script lang="ts">
-  export let stateIndex: number;
 </script>
 
 <img alt="Ein Bild des Zeugnisses das du erhalten hast." src="/pictures/zeugnis.png" />

@@ -3,11 +3,9 @@ import { RelationshipTemplateContent } from "@nmshd/content";
 import config from "config";
 import express from "express";
 import fs from "fs";
-import path from "path";
 import { CONNECTOR_CLIENT } from "../enmeshed/connectorClient";
 import { createRegistrationQRCode } from "../enmeshed/createRegistrationQRCode";
 import { Attachment, SendCustomMessageRequest } from "./Attachment";
-import { nmshdMagic } from "./enmeshedMagicModel";
 import * as KeycloakHelper from "./keycloakHelperFunctions";
 import { extractSessionId, getSocketFromCookie } from "./sessionHelper";
 
@@ -199,22 +197,6 @@ async function handleEnmeshedRelationshipWebhookWithRelationshipResponseSourceTy
   const external = metadata.external;
 
   await newcommerRegistration(change, metadata, relationship.id, changeId, external);
-}
-
-function parseJwt(token: string): any {
-  const base64Url = token.split(".")[1];
-  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-  const jsonPayload = decodeURIComponent(
-    Buffer.from(base64, "base64")
-      .toString()
-      .split("")
-      .map(function (c) {
-        return `%${"00".concat(c.charCodeAt(0).toString(16)).slice(-2)}`;
-      })
-      .join("")
-  );
-
-  return JSON.parse(jsonPayload);
 }
 
 async function newcommerRegistration(

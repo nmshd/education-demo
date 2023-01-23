@@ -1,7 +1,7 @@
 {
   "transportLibrary": {
-    "platformClientId": "hosted-test-connectors",
-    "platformClientSecret": "lXNhScIKUYvJWTdxwnIhzvRwnkG49Q"
+    "platformClientId": "dev",
+    "platformClientSecret": "SY3nxukl6Xn8kGDk52EwBKXZMR9OR5"
   },
   "database": {
     "connectionString": "mongodb://root:example@mongodb:27017/?authSource=admin&readPreference=primary&appname=DyfeCore&ssl=false",
