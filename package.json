@@ -6,7 +6,8 @@
     "packages/server",
     "packages/lib",
     "packages/demo-frontend",
-    "packages/school-frontend"
+    "packages/school-frontend",
+    "packages/school-server"
   ],
   "scripts": {
     "build": "npm run build --workspaces",

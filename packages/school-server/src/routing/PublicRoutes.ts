@@ -87,26 +87,6 @@ export class PublicRoutes {
     await handleEnmeshedRelationshipWebhookWithRelationshipResponseSourceType(request);
   }
 
-  public static async loginWithEnmeshed(req: express.Request, res: express.Response): Promise<void> {
-    await nmshdMagic.deleteMany({ expires: { $lt: Date.now() } });
-    const query = req.query;
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const magic = await nmshdMagic.find({ OTP: query.OTP });
-    if (!magic[0]) return res.sendFile(path.resolve("public", "static", "failure.html"));
-
-    if (magic[0].sessionID) {
-      res.sendFile(path.resolve("public", "static", "success.html"));
-    } else {
-      const tokens = await KeycloakHelper.impersonate(magic[0].userId);
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      await nmshdMagic.deleteMany({ OTP: query.OTP });
-      req.session.user = parseJwt(tokens.access_token);
-      const user = await KeycloakHelper.getUser(req.session.user.preferred_username);
-      req.session.user.attributes = user!.attributes;
-      res.redirect("/");
-    }
-  }
-
   public static getSiteConfig(_req: express.Request, res: express.Response): void {
     res.send({ ...config.get("site.config"), ...{ enableBasicAuth: config.get("server.enableBasicAuth") } });
   }

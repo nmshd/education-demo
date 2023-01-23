@@ -133,7 +133,7 @@ export class PublicRoutes {
     if (magic[0].sessionID) {
       res.sendFile(path.resolve("public", "static", "success.html"));
     } else {
-      const tokens = await KeycloakHelper.impersonate(magic[0].userId);
+      const tokens = await KeycloakHelper.impersonate(magic[0].userId!);
       // eslint-disable-next-line @typescript-eslint/naming-convention
       await nmshdMagic.deleteMany({ OTP: query.OTP });
       req.session.user = parseJwt(tokens.access_token);

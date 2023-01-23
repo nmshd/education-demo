@@ -81,7 +81,7 @@ export default {
 
     // Watch the `public` directory and refresh the
     // browser on changes when not in production
-    !production && livereload({ watch: "../schul-server/public", port: 35728 }),
+    !production && livereload({ watch: "../school-server/public", port: 35728 }),
 
     // If we're building for production (npm run build
     // instead of npm run dev), minify
