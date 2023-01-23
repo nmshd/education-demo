@@ -42,7 +42,7 @@
   },
   "keycloak": {
     "baseUrl": "http://keycloak:8080",
-    "realm": "demo",
+    "realm": "school",
     "client": "demo-client",
     "admin": {
       "username": "admin",

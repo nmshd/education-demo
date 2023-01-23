@@ -22,7 +22,7 @@
     display: flex;
   }
   .active {
-    background-color: blue;
+    background-color: #5252ee;
   }
 
   .header * {

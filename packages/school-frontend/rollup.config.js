@@ -22,7 +22,7 @@ function serve() {
       server = require("child_process").spawn("npm", ["run", "start", "--", "--dev"], {
         stdio: ["ignore", "inherit", "inherit"],
         shell: true,
-        cwd: "../schul-server"
+        cwd: "../school-server"
       });
 
       process.on("SIGTERM", toExit);
@@ -37,7 +37,7 @@ export default {
     sourcemap: true,
     format: "es",
     name: "app",
-    dir: "../schul-server/public/build/",
+    dir: "../school-server/public/build/",
     manualChunks: (moduleName) => {
       if (moduleName.includes("node_modules")) {
         return "vendor";
