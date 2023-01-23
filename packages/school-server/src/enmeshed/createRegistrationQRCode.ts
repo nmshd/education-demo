@@ -7,7 +7,6 @@ import {
 import config from "config";
 import deepAssign from "deep-assign";
 import { DateTime } from "luxon";
-import { Student } from "../routing/KeycloakUser";
 import { CONNECTOR_CLIENT } from "./connectorClient";
 
 const translationMap: any = {
@@ -42,12 +41,9 @@ const translationMap: any = {
 };
 
 export async function createRegistrationQRCode(
-  userName?: string,
   sId?: string,
   required?: [{ name: string; type: string }],
-  optional?: [{ name: string; type: string }],
-  confirmed = false,
-  external = false
+  optional?: [{ name: string; type: string }]
 ): Promise<ArrayBuffer> {
   // TODO: save identity in data structure so there does not have to be a api call on every QR-request
   const identity = (await CONNECTOR_CLIENT.account.getIdentityInfo()).result;
@@ -67,8 +63,7 @@ export async function createRegistrationQRCode(
 
   const requestItems: CreateOutgoingRequestRequestContentItemDerivations[] = [];
 
-  // TODO: resolve error
-  const userData: Student = {
+  const userData: any = {
     firstName: "Robert",
     lastName: "Hugendubel"
   };
@@ -195,9 +190,7 @@ export async function createRegistrationQRCode(
           "@type": "RelationshipTemplateContent",
           title: "Connector Demo Contact",
           metadata: {
-            webSessionId: sId,
-            external: external,
-            confirmed: confirmed
+            webSessionId: sId
           },
           onNewRelationship
         },

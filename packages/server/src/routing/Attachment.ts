@@ -2,10 +2,6 @@ export interface SendCustomMessageRequest {
   username?: string;
   content?: Content;
   attachments?: Attachment[];
-  data?: {
-    insurance: string;
-    sum: number;
-  };
 }
 
 interface Content extends Record<string, any> {

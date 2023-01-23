@@ -7,7 +7,6 @@
     "enableBasicAuth": true,
     "enableGenericDbAccess": false,
     "userQuery": false,
-    "insurancePdfCreation": false,
     "messages": {
       "patterns": [],
       "default": ""
@@ -40,15 +39,6 @@
     "connectionString": "mongodb://root:example@mongodb:27017/?authSource=admin&readPreference=primary&appname=DyfeCore&ssl=false",
     "collectionName": "data"
   },
-  "keycloak": {
-    "baseUrl": "http://keycloak:8080",
-    "realm": "school",
-    "client": "demo-client",
-    "admin": {
-      "username": "admin",
-      "password": "Pa55w0rd"
-    }
-  },
   "connector": {
     "name": "Schul Connector",
     "url": "http://connector-school",
@@ -58,25 +48,9 @@
     "url": "http://localhost:2999"
   },
   "site": {
-    "keycloak": {
-      "realm": "demo",
-      "auth-server-url": "http://localhost:8080/",
-      "ssl-required": "external",
-      "resource": "demo-client",
-      "public-client": true,
-      "confidential-port": 0
-    },
     "config": {
-      "companyName": "Login Demo",
-      "registration": true,
-      "authorization": true,
-      "open": [],
-      "main": [],
-      "profile": [],
       "template": {},
       "userData": {
-        "username": { "name": "username", "type": "text" },
-        "password": { "name": "password", "type": "password" },
         "req": [],
         "opt": [
           { "name": "firstName", "type": "text" },
@@ -84,62 +58,7 @@
           { "name": "birthDate", "type": "date" },
           { "name": "birthPlace", "type": "text" }
         ]
-      },
-      "enmeshedIntro": {
-        "title": "What is Enmeshed exactly?",
-        "body": "Enmeshed is an open source project combining various assets into an overarching digitalization approach for users and organizations. Its overall goal is to introduce a secure but easy-to-use way to share and request data and digital signatures between contacts.",
-        "button": {
-          "text": "Learn more!",
-          "link": "https://enmeshed.eu/explore"
-        },
-        "onboardingIntro": "By connecting your account to Enmeshed you gain following benefits:"
-      },
-      "onboardingInfo": [
-        {
-          "title": "No more password!",
-          "body": {
-            "subtitle": "No need to memorize your password!",
-            "content": "There is no more need to remember a password, you can now use your Enmeshed-app instead to login or make changes to your <a href=\"#/profile\">account</a>!"
-          },
-          "button": {
-            "text": "Learn more!",
-            "link": ""
-          },
-          "footer": {
-            "text": "Who needs a Password anyway? :)"
-          }
-        },
-        {
-          "title": "Secure communication!",
-          "body": {
-            "subtitle": "End to end encryption",
-            "content": "All communication between you and the Company can now safely run via Enmeshed!"
-          },
-          "button": {
-            "text": "Learn more!",
-            "link": "https://enmeshed.eu/explore/cryptography"
-          },
-          "footer": {
-            "text": "Safety first!",
-            "icon": "check2-all"
-          }
-        },
-        {
-          "title": "Data Control!",
-          "body": {
-            "subtitle": "Take control of the data you share!",
-            "content": "You can, at any time, check what data you have shared with the Company in your Enmeshed-app!"
-          },
-          "button": {
-            "text": "Learn more!",
-            "link": ""
-          },
-          "footer": {
-            "text": "You are the master of your Data!",
-            "icon": "emoji-sunglasses"
-          }
-        }
-      ]
+      }
     }
   }
 }

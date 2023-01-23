@@ -5,17 +5,13 @@ import cors from "cors";
 import express, { Express } from "express";
 import session from "express-session";
 import http from "http";
-import { createProxyMiddleware } from "http-proxy-middleware";
 import mongoose from "mongoose";
 import { Server } from "socket.io";
 import { configRouting } from "./routing";
-import { nmshdMagic } from "./routing/enmeshedMagicModel";
 import { extractSessionId, handleConnect, handleDisconnect } from "./routing/sessionHelper";
 
 interface ServerToClientEvents {
-  register(token: object): void;
-  error(error: string): void;
-  asd(error: string): void;
+  scanned(): void;
 }
 
 interface ClientToServerEvents {}
@@ -77,23 +73,6 @@ export class EnmeshedLoginDemoServer {
       this.app.use(cors(config.get("server.cors")));
     }
 
-    const connectorApiProxy = createProxyMiddleware({
-      target: config.get("connector.url"),
-
-      changeOrigin: true,
-
-      pathRewrite: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        "/api/v1/auth/connector": ""
-      },
-
-      onProxyReq: (proxyReq, _req, _res) => {
-        proxyReq.setHeader("X-API-Key", config.get("connector.apiKey"));
-      }
-    });
-
-    this.app.use("/api/v1/auth/connector", connectorApiProxy);
-
     this.app.use(express.json({ limit: "20mb" }));
   }
 
@@ -104,9 +83,8 @@ export class EnmeshedLoginDemoServer {
         handleConnect(connectSId, socket);
       }
 
-      socket.on("disconnect", async function () {
+      socket.on("disconnect", function () {
         if (connectSId) {
-          await nmshdMagic.deleteMany({ sessionID: connectSId });
           handleDisconnect(connectSId, socket.id);
         }
       });

@@ -7,7 +7,6 @@
     "enableBasicAuth": true,
     "enableGenericDbAccess": false,
     "userQuery": false,
-    "insurancePdfCreation": false,
     "messages": {
       "patterns": [],
       "default": ""

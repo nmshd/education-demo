@@ -16,7 +16,6 @@ export function configRouting(s: EnmeshedLoginDemoServer): void {
   publicRouter.router.get("/onboardingQR", PublicRoutes.onboardingQR);
   publicRouter.router.post("/webhooks/enmeshed/relationship", PublicRoutes.handleEnmeshedRelationshipWebhook);
   publicRouter.router.post("/register", PublicRoutes.handleRegularRegistration);
-  publicRouter.router.get("/nmshdUserLogin", PublicRoutes.loginWithEnmeshed);
   publicRouter.router.get("/config", PublicRoutes.getSiteConfig);
   publicRouter.router.get("/keycloakConfig", PublicRoutes.getKeycloakConfig);
   publicRouter.router.post("/sendMessage", PublicRoutes.sendMessage);

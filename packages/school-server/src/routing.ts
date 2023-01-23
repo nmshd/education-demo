@@ -12,9 +12,7 @@ export function configRouting(s: EnmeshedLoginDemoServer): void {
   // publicRouter.router.get("xxx", PublicRoutes.xxx);
   publicRouter.router.get("/registrationQR", PublicRoutes.registrationQR);
   publicRouter.router.post("/webhooks/enmeshed/relationship", PublicRoutes.handleEnmeshedRelationshipWebhook);
-  publicRouter.router.post("/register", PublicRoutes.handleRegularRegistration);
   publicRouter.router.get("/config", PublicRoutes.getSiteConfig);
-  publicRouter.router.post("/sendMessage", PublicRoutes.sendMessage);
 
   s.app.use("/api/v1", publicRouter.router);
 

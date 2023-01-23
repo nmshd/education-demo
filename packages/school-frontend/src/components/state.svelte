@@ -1,10 +1,10 @@
 <script lang="ts">
   import DownloadQr from "./story_states/downloadQr.svelte";
   import OnboardingQr from "./story_states/onboardingQr.svelte";
-  import Zeugnis from "./story_states/zeugnis.svelte";
-  import ZeugnisUebertragung from "./story_states/zeugnisUebertragung.svelte";
+  import SchoolCertificate from "./story_states/schoolCertificate.svelte";
+  import SchoolCertificateTransmision from "./story_states/schoolCertificateTransmision.svelte";
 
-  const state: any[] = [Zeugnis, DownloadQr, OnboardingQr, ZeugnisUebertragung];
+  const state: any[] = [SchoolCertificate, DownloadQr, OnboardingQr, SchoolCertificateTransmision];
 
   const stateDescription: string[] = [
     "Herzlichen Glückwunsch Sie haben ihr Abitur erfolgreich bestanden!\nUm ihnen den Bewerbungsprozess so angenehm wie Möglich zu gestalten ist ihr Zeugnis auch Digital verfügbar. Um fortzufahren clicken Sie auf weiter.",
@@ -14,33 +14,6 @@
   ];
 
   export let stateIndex: number;
-
-  /* 
-  let copy = stateIndex;
-
-  let timer: any;
-
-  function typeWriter(txt: string, i: number) {
-    if (i < txt.length) {
-      document.getElementById("typewriter")!.innerHTML += txt.charAt(i);
-      i++;
-      timer = setTimeout(() => typeWriter(txt, i), 50);
-    }
-  }
-  onMount(() => {
-    typeWriter(stateDescription[stateIndex], 0);
-  });
-  $: try {
-    if (copy !== stateIndex) {
-      copy = stateIndex;
-      window.clearTimeout(timer);
-      document.getElementById("typewriter")!.innerHTML = "";
-      typeWriter(stateDescription[stateIndex], 0);
-    }
-  } catch (e) {
-    console.log(e);
-  }
-  */
 </script>
 
 <div class="story">

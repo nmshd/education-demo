@@ -5,61 +5,20 @@ import express from "express";
 import fs from "fs";
 import { CONNECTOR_CLIENT } from "../enmeshed/connectorClient";
 import { createRegistrationQRCode } from "../enmeshed/createRegistrationQRCode";
-import { Attachment, SendCustomMessageRequest } from "./Attachment";
-import * as KeycloakHelper from "./keycloakHelperFunctions";
+import { Attachment, Content } from "./Attachment";
 import { extractSessionId, getSocketFromCookie } from "./sessionHelper";
 
 export class PublicRoutes {
   public static async registrationQR(req: express.Request, res: express.Response): Promise<any> {
     const connectSId = extractSessionId(req);
-    const query: qs.ParsedQs = req.query;
 
     const patientBuffer = await createRegistrationQRCode(
-      query.username?.toString(),
       connectSId,
       config.get("site.config.userData.req"),
-      config.get("site.config.userData.opt"),
-      query.confirmed?.toString() === "true",
-      !req.headers.referer?.includes(req.headers.host!)
+      config.get("site.config.userData.opt")
     );
     const patientBiStr = arrayBufferToStringArray(patientBuffer);
     res.send(patientBiStr);
-  }
-
-  public static async handleRegularRegistration(req: express.Request, res: express.Response): Promise<any> {
-    const connectSId = extractSessionId(req);
-
-    const socket = getSocketFromCookie(connectSId!);
-
-    if (!socket) {
-      console.error(`Socket for SessionID: ${connectSId} not found`);
-      res.status(400).send(`Socket for SessionID: ${connectSId} not found`);
-      return;
-    }
-
-    const body: any = req.body;
-
-    if (!body?.password || !body?.username) {
-      return res.status(400).send("The username and password query-parameters are mandatory!");
-    }
-
-    const status = await KeycloakHelper.register({
-      userName: body.username,
-      password: body.password,
-      email: body.email,
-      lastName: body.lastName,
-      firstName: body.firstName,
-      attributes: body.attributes,
-      roles: body.roles
-    });
-
-    if (status === 201) {
-      const keycloakTokens = await KeycloakHelper.loginAs(body.username, body.password);
-      socket.emit("register", keycloakTokens);
-      res.sendStatus(201);
-    } else {
-      return res.status(409).send("Username already taken!");
-    }
   }
 
   public static async handleEnmeshedRelationshipWebhook(req: express.Request, res: express.Response): Promise<any> {
@@ -74,13 +33,6 @@ export class PublicRoutes {
 
     const request = body.data;
 
-    const respnseSourceType = request.response!.source!.type;
-
-    if (respnseSourceType === "Message") {
-      await handleEnmeshedLogin(request);
-      return;
-    }
-
     // handle new relationship
     await handleEnmeshedRelationshipWebhookWithRelationshipResponseSourceType(request);
   }
@@ -88,95 +40,6 @@ export class PublicRoutes {
   public static getSiteConfig(_req: express.Request, res: express.Response): void {
     res.send({ ...config.get("site.config"), ...{ enableBasicAuth: config.get("server.enableBasicAuth") } });
   }
-
-  public static getKeycloakConfig(_req: express.Request, res: express.Response): void {
-    res.send(config.get("site.keycloak"));
-  }
-
-  public static async sendMessage(req: express.Request, res: express.Response): Promise<any> {
-    const body: SendCustomMessageRequest = req.body;
-    const content = body.content;
-
-    if (!body.username || !content) return res.status(400).send("The username and content parameter is mandatory!");
-
-    const user = await KeycloakHelper.getUser(body.username);
-
-    if (!user?.attributes?.enmeshedAddress) {
-      return res.status(400).send("User either not found or not connected with Enmeshed!");
-    }
-    const enmeshedAddress = user.attributes.enmeshedAddress[0];
-
-    content["@type"] = "Mail";
-    content.to = [enmeshedAddress];
-
-    const attachmentIds: string[] = [];
-
-    const attachments: Attachment[] | undefined = body.attachments;
-    if (attachments) {
-      for (const attachment of attachments) {
-        let file;
-        try {
-          file = await fs.promises.readFile(attachment.path);
-        } catch (e) {
-          return res.status(400).send("File not Found");
-        }
-        const uploadOwnFileResponse = await CONNECTOR_CLIENT.files.uploadOwnFile({
-          title: attachment.title,
-          description: attachment.description,
-          expiresAt: new Date(Date.now() + 3600 * 1000 * 24).toISOString(),
-          file: file,
-          filename: attachment.filename
-        });
-        if (uploadOwnFileResponse.isError) return res.status(500).send(`Error uploading File: ${attachment.filename}`);
-        attachmentIds.push(uploadOwnFileResponse.result.id);
-      }
-    }
-
-    const message: SendMessageRequest = {
-      recipients: [enmeshedAddress],
-      content,
-      attachments: attachmentIds
-    };
-    const response = await CONNECTOR_CLIENT.messages.sendMessage(message);
-    if (response.isSuccess) {
-      res.sendStatus(200);
-    } else {
-      res.status(500).send("Failed to send Message");
-    }
-  }
-}
-
-async function handleEnmeshedLogin(request: ConnectorRequest) {
-  console.log(request);
-
-  if (!(request.response?.content.result === "Accepted")) {
-    return;
-  }
-
-  const sessionID: string = (request.content.metadata! as any).webSessionId;
-
-  const peer = request.peer;
-
-  const relationship = await CONNECTOR_CLIENT.attributes.getAttributes({
-    content: { key: "userName" },
-    shareInfo: { peer: peer }
-  });
-
-  if (relationship.isError) {
-    console.error("User not found!");
-    return;
-  }
-
-  const nmshdUser = relationship.result[0].content.value.value as string;
-
-  const user = await KeycloakHelper.getUser(nmshdUser);
-  const tokens = await KeycloakHelper.impersonate(user!.id);
-  const socket = getSocketFromCookie(sessionID);
-  if (!socket) {
-    console.error(`Socket for SessionID: ${sessionID} not found`);
-    return;
-  }
-  socket.emit("register", tokens);
 }
 
 async function handleEnmeshedRelationshipWebhookWithRelationshipResponseSourceType(request: ConnectorRequest) {
@@ -222,12 +85,13 @@ async function newcommerRegistration(
     socket.emit("scanned");
   }
 
-  const content: any = {};
+  const content: Content = {
+    subject: "Zeugnisübertragung",
+    body: ""
+  };
 
   content["@type"] = "Mail";
   content.to = [enmeshedAddress];
-  content.body = "";
-  content.subject = "Zeugnisübertragung";
 
   const attachmentIds: string[] = [];
 

@@ -8,8 +8,10 @@ It is advised to run this demo under linux, docker and npm have to be installed.
 
 To start the demo in development mode run following commands after starting docker.
 
-1. `$npm i` (only required the first time)
-2. `$npm run start`
+```bash
+npm i # only the first time
+npm run start
+```
 
 ## Documentation
 
