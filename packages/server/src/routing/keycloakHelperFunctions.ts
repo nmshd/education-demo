@@ -1,6 +1,6 @@
 import axios from "axios";
 import config from "config";
-import { KeycloakUser, KeycloakUserWithRoles } from "./KeycloakUser";
+import { KeycloakUserWithRoles } from "./KeycloakUser";
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const randExp = require("randexp");
 

@@ -1,5 +1,4 @@
 import { QueryTranslator } from "@js-soft/docdb-querytranslator";
-import axios from "axios";
 import config from "config";
 import express from "express";
 import { arbitraryModel } from "./arbitraryDataModel";
@@ -59,5 +58,4 @@ export class PrivateRoutes {
     const result = await arbitraryModel.updateMany(req.body.filter, req.body.data);
     return res.send(result);
   }
-
 }

@@ -3,7 +3,6 @@ import {
   ConnectorRequestContentItemGroup,
   ConnectorRequestResponseContent,
   ConnectorRequestResponseItemGroup,
-  CreateAttributeRequestItem,
   SendMessageRequest
 } from "@nmshd/connector-sdk";
 import { RelationshipTemplateContent } from "@nmshd/content";
@@ -216,7 +215,6 @@ async function handleEnmeshedLogin(request: ConnectorRequest) {
 
   const peer = request.peer;
 
-  // @ts-ignore
   const relationship = await CONNECTOR_CLIENT.attributes.getAttributes({
     content: { key: "userName" },
     shareInfo: { peer: peer }
@@ -227,7 +225,7 @@ async function handleEnmeshedLogin(request: ConnectorRequest) {
     return;
   }
 
-  const nmshdUser = relationship.result![0].content.value.value as string;
+  const nmshdUser = relationship.result[0].content.value.value as string;
 
   const user = await KeycloakHelper.getUser(nmshdUser);
   const tokens = await KeycloakHelper.impersonate(user!.id);
@@ -244,7 +242,7 @@ async function handleEnmeshedRelationshipWebhookWithRelationshipResponseSourceTy
 
   const templateId = request.source!.reference;
 
-  // @ts-ignore
+  // @ts-expect-error
   const relationship = (await CONNECTOR_CLIENT.relationships.getRelationships({ template: { id: templateId } }))
     .result[0];
 
@@ -252,9 +250,8 @@ async function handleEnmeshedRelationshipWebhookWithRelationshipResponseSourceTy
 
   const metadata: any = (template.content as RelationshipTemplateContent).metadata!;
 
-  const username: string | undefined = (
-    (request.content.items[0] as ConnectorRequestContentItemGroup).items[1] as CreateAttributeRequestItem
-  )?.attribute?.value?.value as string;
+  const username: string | undefined = ((request.content.items[0] as ConnectorRequestContentItemGroup).items[1] as any)
+    ?.attribute?.value?.value as string;
 
   const type = metadata.type;
 
@@ -277,10 +274,10 @@ async function handleEnmeshedRelationshipWebhookWithRelationshipResponseSourceTy
 
   switch (type) {
     case RegistrationType.Newcommer:
-      await newcommerRegistration(change, username!, metadata, relationship.id, changeId, external);
+      await newcommerRegistration(change, username, metadata, relationship.id, changeId, external);
       break;
     case RegistrationType.Onboarding:
-      await onboardingRegistration(change, username!, metadata, relationship.id, changeId);
+      await onboardingRegistration(change, username, metadata, relationship.id, changeId);
       break;
     default:
       console.error(`Unknown RegistrationType '${type}'`);
