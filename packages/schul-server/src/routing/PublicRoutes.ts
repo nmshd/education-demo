@@ -257,7 +257,7 @@ async function newcommerRegistration(
 
   if (socket && response.isSuccess) {
     // Socket emit sucessfully onboarded
-    // socket.emit("register", keycloakTokens);
+    socket.emit("scanned");
   }
 
   const content: any = {};

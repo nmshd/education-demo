@@ -2,7 +2,7 @@
   export let stateIndex: number;
 </script>
 
-<img src="/pictures/zeugnis.png" />
+<img alt="Ein Bild des Zeugnisses das du erhalten hast." src="/pictures/zeugnis.png" />
 
 <style>
   img {

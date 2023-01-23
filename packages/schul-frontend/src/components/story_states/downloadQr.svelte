@@ -25,6 +25,11 @@
     background-color: blue;
   }
 
+  .header * {
+    padding: 1em;
+    border-radius: 1rem;
+  }
+
   .a {
     max-width: 250px;
     width: 50%;

@@ -50,7 +50,7 @@
     }
   },
   "connector": {
-    "name": "Login Demo Connector",
+    "name": "Schul Connector",
     "url": "http://connector-school",
     "apiKey": "xxx"
   },
@@ -77,13 +77,13 @@
       "userData": {
         "username": { "name": "username", "type": "text" },
         "password": { "name": "password", "type": "password" },
-        "req": [
+        "req": [],
+        "opt": [
           { "name": "firstName", "type": "text" },
           { "name": "lastName", "type": "text" },
           { "name": "birthDate", "type": "date" },
           { "name": "birthPlace", "type": "text" }
-        ],
-        "opt": []
+        ]
       },
       "enmeshedIntro": {
         "title": "What is Enmeshed exactly?",

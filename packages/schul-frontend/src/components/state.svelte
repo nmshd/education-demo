@@ -1,20 +1,21 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import DownloadQr from "./story_states/downloadQr.svelte";
   import OnboardingQr from "./story_states/onboardingQr.svelte";
-  import QrDummy from "./story_states/QrDummy.svelte";
   import Zeugnis from "./story_states/zeugnis.svelte";
+  import ZeugnisUebertragung from "./story_states/zeugnisUebertragung.svelte";
 
-  const state: any[] = [Zeugnis, QrDummy, DownloadQr, OnboardingQr];
+  const state: any[] = [Zeugnis, DownloadQr, OnboardingQr, ZeugnisUebertragung];
 
   const stateDescription: string[] = [
     "Herzlichen Glückwunsch Sie haben ihr Abitur erfolgreich bestanden!\nUm ihnen den Bewerbungsprozess so angenehm wie Möglich zu gestalten ist ihr Zeugnis auch Digital verfügbar. Um fortzufahren clicken Sie auf weiter.",
-    "Ihre Zeugnismappe beinhaltet einen Zettel mit QR-Codes die zum Download der Enmeshed App und anschließend zum speichern des Zeugnisses in selbiger dienen. Um ihre individuellen QR-Codes zu erhalten clicken Sie auf weiter.",
-    "Falls Sie die Enmeshed App noch nicht installiert haben können Sie das über die hier Sichtbaren QR-Codes tun."
+    "Falls Sie die Enmeshed App noch nicht installiert haben können Sie das über die hier Sichtbaren QR-Codes tun.",
+    "Um ihre Zeugnis Digital in ihrer Enmeshed-Wallet zu speichern und fortzufahren scannen Sie diesen Qr-Code mit der App.",
+    "In ihrer Beziehungsansicht mit der Schule sehen Sie nun eine neue Nachricht mit dem angehängten Zeugnis!"
   ];
 
   export let stateIndex: number;
 
+  /* 
   let copy = stateIndex;
 
   let timer: any;
@@ -39,11 +40,12 @@
   } catch (e) {
     console.log(e);
   }
+  */
 </script>
 
 <div class="story">
   <div class="story-description">
-    <div id="typewriter" class="typewriter" />
+    <div id="typewriter" class="typewriter">{stateDescription[stateIndex]}</div>
   </div>
   <div class="story-content">
     <svelte:component this={state[stateIndex]} bind:stateIndex />
