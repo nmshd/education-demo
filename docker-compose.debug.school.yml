@@ -1,0 +1,34 @@
+version: "3.7"
+
+services:
+  website-school:
+    build:
+      dockerfile: Dockerfile.debug
+      context: .
+    entrypoint: npm run dev --workspace packages/school-frontend
+    container_name: website-school
+    ports:
+      - 2902:2999
+      - 35728:35727
+    volumes:
+      - ./:/usr/app/
+    restart: always
+    depends_on:
+      - mongodb
+      - connector-school
+      - keycloak
+    environment:
+      - NODE_CONFIG_ENV=development_demo
+
+  connector-school:
+    container_name: connector-school
+    image: ghcr.io/nmshd/connector:3.2.0
+    environment:
+      CUSTOM_CONFIG_LOCATION: "/config.json"
+      logging__appenders__console__level: "TRACE"
+    ports:
+      - 8011:80
+    volumes:
+      - ./config/connector-school-config.json:/config.json:RO
+    depends_on:
+      - mongodb
