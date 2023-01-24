@@ -31,7 +31,8 @@ function serve() {
 export default defineConfig({
   build: {
     outDir: "../server/public",
-    rollupOptions: config
+    rollupOptions: config,
+    watch: {}
   },
   plugins: [svelte(), serve()]
 });
