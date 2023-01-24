@@ -6,6 +6,7 @@
     "packages/server",
     "packages/lib",
     "packages/demo-frontend",
+    "packages/education-space",
     "packages/school-frontend",
     "packages/school-server"
   ],

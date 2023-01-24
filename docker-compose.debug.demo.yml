@@ -5,7 +5,7 @@ services:
     build:
       dockerfile: Dockerfile.debug
       context: .
-    entrypoint: npm run dev --workspace packages/demo-frontend
+    entrypoint: npm run dev --workspace packages/education-space
     container_name: website-demo
     ports:
       - 2901:2999
