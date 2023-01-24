@@ -10,13 +10,10 @@ import { RelationshipTemplateContent } from "@nmshd/content";
 import config from "config";
 import express from "express";
 import fs from "fs";
-import path from "path";
 import { CONNECTOR_CLIENT } from "../enmeshed/connectorClient";
 import { createRegistrationQRCode, RegistrationType } from "../enmeshed/createRegistrationQRCode";
 import { Attachment, SendCustomMessageRequest } from "./Attachment";
-import { nmshdMagic } from "./enmeshedMagicModel";
 import * as KeycloakHelper from "./keycloakHelperFunctions";
-import { KeycloakUser } from "./KeycloakUser";
 import { extractSessionId, getSocketFromCookie } from "./sessionHelper";
 
 export class PublicRoutes {
@@ -124,26 +121,6 @@ export class PublicRoutes {
     await handleEnmeshedRelationshipWebhookWithRelationshipResponseSourceType(request);
   }
 
-  public static async loginWithEnmeshed(req: express.Request, res: express.Response): Promise<void> {
-    await nmshdMagic.deleteMany({ expires: { $lt: Date.now() } });
-    const query = req.query;
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const magic = await nmshdMagic.find({ OTP: query.OTP });
-    if (!magic[0]) return res.sendFile(path.resolve("public", "static", "failure.html"));
-
-    if (magic[0].sessionID) {
-      res.sendFile(path.resolve("public", "static", "success.html"));
-    } else {
-      const tokens = await KeycloakHelper.impersonate(magic[0].userId);
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      await nmshdMagic.deleteMany({ OTP: query.OTP });
-      req.session.user = parseJwt(tokens.access_token);
-      const user = await KeycloakHelper.getUser(req.session.user.preferred_username);
-      req.session.user.attributes = user!.attributes;
-      res.redirect("/");
-    }
-  }
-
   public static getSiteConfig(_req: express.Request, res: express.Response): void {
     res.send({ ...config.get("site.config"), ...{ enableBasicAuth: config.get("server.enableBasicAuth") } });
   }
@@ -216,7 +193,6 @@ async function handleEnmeshedLogin(request: ConnectorRequest) {
 
   const peer = request.peer;
 
-  // @ts-ignore
   const relationship = await CONNECTOR_CLIENT.attributes.getAttributes({
     content: { key: "userName" },
     shareInfo: { peer: peer }
@@ -227,7 +203,7 @@ async function handleEnmeshedLogin(request: ConnectorRequest) {
     return;
   }
 
-  const nmshdUser = relationship.result![0].content.value.value as string;
+  const nmshdUser = relationship.result[0].content.value.value as string;
 
   const user = await KeycloakHelper.getUser(nmshdUser);
   const tokens = await KeycloakHelper.impersonate(user!.id);
@@ -244,7 +220,7 @@ async function handleEnmeshedRelationshipWebhookWithRelationshipResponseSourceTy
 
   const templateId = request.source!.reference;
 
-  // @ts-ignore
+  // @ts-expect-error
   const relationship = (await CONNECTOR_CLIENT.relationships.getRelationships({ template: { id: templateId } }))
     .result[0];
 
@@ -252,35 +228,37 @@ async function handleEnmeshedRelationshipWebhookWithRelationshipResponseSourceTy
 
   const metadata: any = (template.content as RelationshipTemplateContent).metadata!;
 
-  const username: string | undefined = (
-    (request.content.items[0] as ConnectorRequestContentItemGroup).items[1] as CreateAttributeRequestItem
-  )?.attribute?.value?.value as string;
+  const itemGroup = request.content.items[0] as ConnectorRequestContentItemGroup;
 
-  const type = metadata.type;
-
-  const change: ConnectorRequestResponseContent = request.response!.content;
-
-  if (!username) {
+  if (itemGroup.items.length < 2) {
     const sId = metadata.webSessionId;
     const socket = getSocketFromCookie(sId);
     if (!socket) {
       console.error(`Socket for SessionID: ${sId} not found`);
       return await CONNECTOR_CLIENT.relationships.rejectRelationshipChange(relationship.id, changeId);
     }
+    console.error("Failed login attempt!");
     socket.emit("failedLogin", {
       english: "Failed Login: not connected to this Enmeshed-account",
       german: "Fehlgeschlagener Login: keine Verbindung zu diesem Enmeshed-account"
     });
     return await CONNECTOR_CLIENT.relationships.rejectRelationshipChange(relationship.id, changeId);
   }
+
+  const username = (itemGroup.items[1] as CreateAttributeRequestItem).attribute.value.value as string;
+
+  const type = metadata.type;
+
+  const change: ConnectorRequestResponseContent = request.response!.content;
+
   const external = metadata.external;
 
   switch (type) {
     case RegistrationType.Newcommer:
-      await newcommerRegistration(change, username!, metadata, relationship.id, changeId, external);
+      await newcommerRegistration(change, username, metadata, relationship.id, changeId, external);
       break;
     case RegistrationType.Onboarding:
-      await onboardingRegistration(change, username!, metadata, relationship.id, changeId);
+      await onboardingRegistration(change, username, metadata, relationship.id, changeId);
       break;
     default:
       console.error(`Unknown RegistrationType '${type}'`);
@@ -316,22 +294,6 @@ async function onboardingRegistration(
   }
 }
 
-function parseJwt(token: string): any {
-  const base64Url = token.split(".")[1];
-  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-  const jsonPayload = decodeURIComponent(
-    Buffer.from(base64, "base64")
-      .toString()
-      .split("")
-      .map(function (c) {
-        return `%${"00".concat(c.charCodeAt(0).toString(16)).slice(-2)}`;
-      })
-      .join("")
-  );
-
-  return JSON.parse(jsonPayload);
-}
-
 async function newcommerRegistration(
   change: ConnectorRequestResponseContent,
   username: string,
@@ -361,7 +323,7 @@ async function newcommerRegistration(
         const keycloakTokens = await KeycloakHelper.impersonate(user!.id);
         socket.emit("register", keycloakTokens);
       } else {
-        await sendLoginLink(user!);
+        console.error("Socket not found, could not login!");
       }
     }
   } else {
@@ -438,33 +400,4 @@ function getUserData(
   console.log(retValue);
 
   return retValue;
-}
-
-async function sendLoginLink(userData: KeycloakUser) {
-  const enmeshedAddress: string = userData.attributes!.enmeshedAddress![0];
-  const OTP = KeycloakHelper.generateOTP();
-
-  const data = new nmshdMagic({
-    userId: userData.id,
-    sessionID: "",
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    OTP,
-    code: 0,
-    expires: Date.now() + 300000
-  });
-
-  data.save();
-
-  const link = `${config.get("otp.url")}/api/v1/nmshdUserLogin?OTP=${OTP}`;
-
-  const message: SendMessageRequest = {
-    recipients: [enmeshedAddress],
-    content: {
-      "@type": "Mail",
-      to: [enmeshedAddress],
-      subject: "Login",
-      body: `Hello there! \n<a href='${link}'>Click on this link to and you will be redirected to our website.</a>\nThe link is valid 5 minutes from now.`
-    }
-  };
-  await CONNECTOR_CLIENT.messages.sendMessage(message);
 }

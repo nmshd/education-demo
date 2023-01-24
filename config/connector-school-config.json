@@ -5,7 +5,7 @@
   },
   "database": {
     "connectionString": "mongodb://root:example@mongodb:27017/?authSource=admin&readPreference=primary&appname=DyfeCore&ssl=false",
-    "dbName": "demo"
+    "dbName": "school"
   },
   "infrastructure": {
     "httpServer": {
@@ -21,11 +21,11 @@
       "enabled": true,
       "targets": {
         "website_relationship": {
-          "url": "http://website-demo:2999/api/v1/webhooks/enmeshed/relationship",
+          "url": "http://website-school:2999/api/v1/webhooks/enmeshed/relationship",
           "headers": { "X-API-KEY": "xxx" }
         },
         "website_message": {
-          "url": "http://website-demo:2999/api/v1/webhooks/enmeshed/message",
+          "url": "http://website-school:2999/api/v1/webhooks/enmeshed/message",
           "headers": { "X-API-KEY": "xxx" }
         }
       },

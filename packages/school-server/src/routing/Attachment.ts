@@ -1,10 +1,4 @@
-export interface SendCustomMessageRequest {
-  username?: string;
-  content?: Content;
-  attachments?: Attachment[];
-}
-
-interface Content extends Record<string, any> {
+export interface Content extends Record<string, any> {
   subject: string;
   body: string;
 }

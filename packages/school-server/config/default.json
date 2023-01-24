@@ -1,0 +1,64 @@
+{
+  "server": {
+    "publicDirectory": "./public",
+    "url": "localhost",
+    "hostStatic": "public",
+    "port": 2999,
+    "enableBasicAuth": true,
+    "enableGenericDbAccess": false,
+    "userQuery": false,
+    "messages": {
+      "patterns": [],
+      "default": ""
+    },
+    "cors": {
+      "origin": true,
+      "methods": ["GET", "PUT", "POST", "DELETE"],
+      "allowedHeaders": ["Content-Type", "Authorization"],
+      "credentials": true,
+      "preflightContinue": false,
+      "optionsSuccessStatus": 200,
+      "corsWhitelist": []
+    },
+    "session": {
+      "secret": "abc",
+      "name": "connect.sid",
+      "resave": false,
+      "saveUninitialized": false
+    },
+    "error": {
+      "test": {
+        "enabled": true,
+        "route": "/error"
+      },
+      "catchall": "./error.html"
+    },
+    "templateDirectory": "./views"
+  },
+  "mongodb": {
+    "connectionString": "mongodb://root:example@mongodb:27017/?authSource=admin&readPreference=primary&appname=DyfeCore&ssl=false",
+    "collectionName": "data"
+  },
+  "connector": {
+    "name": "Schul Connector",
+    "url": "http://connector-school",
+    "apiKey": "xxx"
+  },
+  "otp": {
+    "url": "http://localhost:2999"
+  },
+  "site": {
+    "config": {
+      "template": {},
+      "userData": {
+        "req": [],
+        "opt": [
+          { "name": "firstName", "type": "text" },
+          { "name": "lastName", "type": "text" },
+          { "name": "birthDate", "type": "date" },
+          { "name": "birthPlace", "type": "text" }
+        ]
+      }
+    }
+  }
+}
