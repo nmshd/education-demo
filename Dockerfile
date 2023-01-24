@@ -11,8 +11,8 @@ WORKDIR /usr/app
 COPY packages/server/package.json ./
 RUN npm install
 COPY packages/server/config config
-COPY --from=builder /usr/app/packages/server/public/ public/
-COPY --from=builder /usr/app/packages/server/dist dist/
-COPY --from=builder /usr/app/packages/school-server/public/ public/
-COPY --from=builder /usr/app/packages/school-server/dist/ dist/
-ENTRYPOINT [ "node", "dist/index.js" ]
+COPY --from=builder /usr/app/packages/server/public/ demo/public/
+COPY --from=builder /usr/app/packages/server/dist demo/dist/
+COPY --from=builder /usr/app/packages/school-server/public/ school/public/
+COPY --from=builder /usr/app/packages/school-server/dist/ school/dist/
+ENTRYPOINT [ "node", "demo/dist/index.js" ]
