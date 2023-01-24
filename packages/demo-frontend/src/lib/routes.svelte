@@ -6,6 +6,7 @@
   import Main from "../components/routes/index/main.svelte";
   import Test from "../components/routes/test.svelte";
   import { keycloakInstance, loggedIn, siteConfig, userInfo } from "../store";
+  import { io } from "./realtime";
 
   export const routes = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -58,7 +59,8 @@
         siteConfig,
         keycloakInstance,
         loggedIn,
-        userInfo
+        userInfo,
+        socket: io
       },
       conditions: [
         (_detail: any) => {

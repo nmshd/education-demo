@@ -3,6 +3,7 @@ import {
   ConnectorRequestContentItemGroup,
   ConnectorRequestResponseContent,
   ConnectorRequestResponseItemGroup,
+  CreateAttributeRequestItem,
   SendMessageRequest
 } from "@nmshd/connector-sdk";
 import { RelationshipTemplateContent } from "@nmshd/content";
@@ -227,26 +228,29 @@ async function handleEnmeshedRelationshipWebhookWithRelationshipResponseSourceTy
 
   const metadata: any = (template.content as RelationshipTemplateContent).metadata!;
 
-  const username: string | undefined = ((request.content.items[0] as ConnectorRequestContentItemGroup).items[1] as any)
-    ?.attribute?.value?.value as string;
+  const itemGroup = request.content.items[0] as ConnectorRequestContentItemGroup;
 
-  const type = metadata.type;
-
-  const change: ConnectorRequestResponseContent = request.response!.content;
-
-  if (!username) {
+  if (itemGroup.items.length < 2) {
     const sId = metadata.webSessionId;
     const socket = getSocketFromCookie(sId);
     if (!socket) {
       console.error(`Socket for SessionID: ${sId} not found`);
       return await CONNECTOR_CLIENT.relationships.rejectRelationshipChange(relationship.id, changeId);
     }
+    console.error("Failed login attempt!");
     socket.emit("failedLogin", {
       english: "Failed Login: not connected to this Enmeshed-account",
       german: "Fehlgeschlagener Login: keine Verbindung zu diesem Enmeshed-account"
     });
     return await CONNECTOR_CLIENT.relationships.rejectRelationshipChange(relationship.id, changeId);
   }
+
+  const username = (itemGroup.items[1] as CreateAttributeRequestItem).attribute.value.value as string;
+
+  const type = metadata.type;
+
+  const change: ConnectorRequestResponseContent = request.response!.content;
+
   const external = metadata.external;
 
   switch (type) {

@@ -13,4 +13,6 @@ RUN npm install
 COPY packages/server/config config
 COPY --from=builder /usr/app/packages/server/public/ public/
 COPY --from=builder /usr/app/packages/server/dist dist/
+COPY --from=builder /usr/app/packages/school-server/public/ public/
+COPY --from=builder /usr/app/packages/school-server/dist/ dist/
 ENTRYPOINT [ "node", "dist/index.js" ]
