@@ -1,6 +1,28 @@
 version: "3.7"
 
 services:
+  demo:
+    build: .
+    container_name: demo
+    ports:
+      - 8080:2999
+    entrypoint: ["npm", "demo/dist/index.js"]
+    depends_on:
+      - mongodb
+      - keycloak
+      - demo-connector
+
+  school:
+    build: .
+    container_name: school
+    ports:
+      - 8081:2999
+    entrypoint: ["npm", "school/dist/index.js"]
+    depends_on:
+      - mongodb
+      - keycloak
+      - school-connector
+
   mongodb:
     container_name: mongodb
     image: mongo
@@ -18,6 +40,7 @@ services:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: password
+
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     environment:
