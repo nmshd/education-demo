@@ -1,27 +1,53 @@
 version: "3.7"
 
 services:
-  demo:
+  website-demo:
     build: .
-    container_name: demo
+    container_name: website-demo
     ports:
-      - 8080:2999
-    entrypoint: ["npm", "demo/dist/index.js"]
+      - 2901:2999
+    entrypoint: ["node", "demo/dist/index.js"]
     depends_on:
       - mongodb
       - keycloak
-      - demo-connector
+      - connector-demo
+    
+  connector-demo:
+    container_name: connector-demo
+    image: ghcr.io/nmshd/connector:3.2.0
+    environment:
+      CUSTOM_CONFIG_LOCATION: "/config.json"
+      logging__appenders__console__level: "TRACE"
+    ports:
+      - 8012:80
+    volumes:
+      - ./config/connector-demo-config.json:/config.json:RO
+    depends_on:
+      - mongodb
 
-  school:
+  website-school:
     build: .
-    container_name: school
+    container_name: website-school
     ports:
-      - 8081:2999
-    entrypoint: ["npm", "school/dist/index.js"]
+      - 2902:2999
+    entrypoint: ["node", "school/dist/index.js"]
     depends_on:
       - mongodb
       - keycloak
-      - school-connector
+      - connector-school
+
+  connector-school:
+    container_name: connector-school
+    image: ghcr.io/nmshd/connector:3.2.0
+    environment:
+      CUSTOM_CONFIG_LOCATION: "/config.json"
+      logging__appenders__console__level: "TRACE"
+    ports:
+      - 8011:80
+    volumes:
+      - ./config/connector-school-config.json:/config.json:RO
+    depends_on:
+      - mongodb
 
   mongodb:
     container_name: mongodb
