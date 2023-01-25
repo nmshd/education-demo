@@ -1,5 +1,4 @@
 import { ConnectorRequest, ConnectorRequestResponseContent, SendMessageRequest } from "@nmshd/connector-sdk";
-import { RelationshipTemplateContent } from "@nmshd/content";
 import config from "config";
 import express from "express";
 import fs from "fs";
@@ -53,7 +52,15 @@ async function handleEnmeshedRelationshipWebhookWithRelationshipResponseSourceTy
 
   const template = (await CONNECTOR_CLIENT.relationshipTemplates.getRelationshipTemplate(templateId)).result;
 
-  const metadata: any = (template.content as RelationshipTemplateContent).metadata!;
+  const metadata: any = (
+    template.content as {
+      "@type": "RelationshipTemplateContent";
+      title?: string;
+      metadata?: object;
+      onNewRelationship: ConnectorRequest;
+      onExistingRelationship?: ConnectorRequest;
+    }
+  ).metadata!;
 
   const change: ConnectorRequestResponseContent = request.response!.content;
 
