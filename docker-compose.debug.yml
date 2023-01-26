@@ -28,8 +28,6 @@ services:
     volumes:
       - ./config/keycloak.conf:/opt/keycloak/conf/keycloak.conf:ro
     command: start-dev
-    ports:
-      - 8080:8080
     depends_on:
       - postgres
 
