@@ -26,4 +26,4 @@ RUN npm install
 COPY --from=builder /usr/app/packages/school-server/public/ public/
 COPY --from=builder /usr/app/packages/school-server/dist/ dist/
 
-ENTRYPOINT [ "node", "demo/dist/index.js" ]
+ENTRYPOINT [ "node", "dist/index.js" ]
