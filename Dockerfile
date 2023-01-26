@@ -7,12 +7,23 @@ RUN npm run build
 
 FROM node:lts-alpine
 ENV NODE_ENV=production
-WORKDIR /usr/app
+
+# demo
+WORKDIR /usr/app/demo
 COPY packages/server/package.json ./
-RUN npm install
 COPY packages/server/config config
-COPY --from=builder /usr/app/packages/server/public/ demo/public/
-COPY --from=builder /usr/app/packages/server/dist demo/dist/
-COPY --from=builder /usr/app/packages/school-server/public/ school/public/
-COPY --from=builder /usr/app/packages/school-server/dist/ school/dist/
-ENTRYPOINT [ "node", "demo/dist/index.js" ]
+RUN npm install
+
+COPY --from=builder /usr/app/packages/server/public/ public/
+COPY --from=builder /usr/app/packages/server/dist dist/
+
+# school
+WORKDIR /usr/app/school
+COPY packages/school-server/package.json ./
+COPY packages/school-server/config config
+RUN npm install
+
+COPY --from=builder /usr/app/packages/school-server/public/ public/
+COPY --from=builder /usr/app/packages/school-server/dist/ dist/
+
+ENTRYPOINT [ "node", "dist/index.js" ]

@@ -1,6 +1,52 @@
 version: "3.7"
 
 services:
+  website-demo:
+    build: .
+    container_name: website-demo
+    ports:
+      - 2901:2999
+    working_dir: "/usr/app/demo"
+    depends_on:
+      - mongodb
+      - keycloak
+      - connector-demo
+
+  connector-demo:
+    container_name: connector-demo
+    image: ghcr.io/nmshd/connector:3.2.3
+    environment:
+      CUSTOM_CONFIG_LOCATION: "/config.json"
+    ports:
+      - 8012:80
+    volumes:
+      - ./config/connector-demo-config.json:/config.json:ro
+    depends_on:
+      - mongodb
+
+  website-school:
+    build: .
+    container_name: website-school
+    ports:
+      - 2902:2999
+    working_dir: "/usr/app/school"
+    depends_on:
+      - mongodb
+      - keycloak
+      - connector-school
+
+  connector-school:
+    container_name: connector-school
+    image: ghcr.io/nmshd/connector:3.2.3
+    environment:
+      CUSTOM_CONFIG_LOCATION: "/config.json"
+    ports:
+      - 8011:80
+    volumes:
+      - ./config/connector-school-config.json:/config.json:ro
+    depends_on:
+      - mongodb
+
   mongodb:
     container_name: mongodb
     image: mongo
@@ -18,6 +64,7 @@ services:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: password
+
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     environment:
