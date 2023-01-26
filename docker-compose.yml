@@ -6,12 +6,12 @@ services:
     container_name: website-demo
     ports:
       - 2901:2999
-    working_dir: "/usr/app/demo" 
+    working_dir: "/usr/app/demo"
     depends_on:
       - mongodb
       - keycloak
       - connector-demo
-    
+
   connector-demo:
     container_name: connector-demo
     image: ghcr.io/nmshd/connector:3.2.3
@@ -29,7 +29,7 @@ services:
     container_name: website-school
     ports:
       - 2902:2999
-    working_dir: "/usr/app/school" 
+    working_dir: "/usr/app/school"
     depends_on:
       - mongodb
       - keycloak
