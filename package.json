@@ -19,11 +19,11 @@
     "stop": "docker compose -f docker-compose.debug.yml -f docker-compose.debug.school.yml -f docker-compose.debug.demo.yml down",
     "lint": "npm run lint:prettier && npm run lint:eslint",
     "lint:eslint": "npx eslint --ext .ts,.svelte,.js,.d.ts ./packages/demo-frontend/src ./packages/school-frontend/src ./packages/school-server/src ./packages/server/src ./packages/lib/src",
-    "lint:prettier": "prettier --check .",
-    "prettier": "prettier ."
+    "lint:prettier": "prettier --check ."
   },
   "devDependencies": {
     "@js-soft/eslint-config-ts": "1.5.2",
+    "@js-soft/license-check": "^1.0.6",
     "eslint": "^8.12.0",
     "eslint-plugin-svelte3": "3.4.1",
     "prettier": "^2.6.2",
