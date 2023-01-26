@@ -4,7 +4,7 @@ import express from "express";
 import { arbitraryModel } from "./arbitraryDataModel";
 
 export class PrivateRoutes {
-  public static writeInDb(req: express.Request, res: express.Response): any {
+  public static async writeInDb(req: express.Request, res: express.Response): Promise<any> {
     if (!config.get("server.enableGenericDbAccess")) return res.sendStatus(400);
     if (!req.body.payload) return res.sendStatus(400);
 
@@ -12,7 +12,7 @@ export class PrivateRoutes {
       payload: req.body.payload
     });
 
-    data.save();
+    await data.save();
     return res.sendStatus(201);
   }
 
