@@ -1,5 +1,6 @@
 {
   "transportLibrary": {
+    "baseUrl": "https://bird.enmeshed.eu",
     "platformClientId": "dev",
     "platformClientSecret": "SY3nxukl6Xn8kGDk52EwBKXZMR9OR5"
   },
