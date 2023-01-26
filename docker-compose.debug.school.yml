@@ -22,13 +22,13 @@ services:
 
   connector-school:
     container_name: connector-school
-    image: ghcr.io/nmshd/connector:3.2.0
+    image: ghcr.io/nmshd/connector:3.2.3
     environment:
       CUSTOM_CONFIG_LOCATION: "/config.json"
       logging__appenders__console__level: "TRACE"
     ports:
       - 8011:80
     volumes:
-      - ./config/connector-school-config.json:/config.json:RO
+      - ./config/connector-school-config.json:/config.json:ro
     depends_on:
       - mongodb
