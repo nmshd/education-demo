@@ -17,8 +17,6 @@ services:
     image: ghcr.io/nmshd/connector:3.2.3
     environment:
       CUSTOM_CONFIG_LOCATION: "/config.json"
-    ports:
-      - 8012:80
     volumes:
       - ./config/connector-demo-config.json:/config.json:ro
     depends_on:
@@ -40,8 +38,6 @@ services:
     image: ghcr.io/nmshd/connector:3.2.3
     environment:
       CUSTOM_CONFIG_LOCATION: "/config.json"
-    ports:
-      - 8011:80
     volumes:
       - ./config/connector-school-config.json:/config.json:ro
     depends_on:
@@ -73,8 +69,6 @@ services:
     volumes:
       - ./config/keycloak.conf:/opt/keycloak/conf/keycloak.conf:ro
     command: start
-    ports:
-      - 8080:8080
     depends_on:
       - postgres
 
