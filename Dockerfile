@@ -21,6 +21,7 @@ COPY --from=builder /usr/app/packages/server/dist dist/
 WORKDIR /usr/app/school
 COPY packages/school-server/package.json ./
 COPY packages/school-server/config config
+COPY packages/school-server/attachment attachment
 RUN npm install
 
 COPY --from=builder /usr/app/packages/school-server/public/ public/
