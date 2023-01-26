@@ -94,6 +94,19 @@ export class EnmeshedLoginDemoServer {
 
     this.app.use("/api/v1/auth/connector", connectorApiProxy);
 
+    const keycloakProxy = createProxyMiddleware({
+      target: config.get("keycloak.baseUrl"),
+
+      changeOrigin: true,
+
+      pathRewrite: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        "/kc": ""
+      }
+    });
+
+    this.app.use("/kc", keycloakProxy);
+
     this.app.use(express.json({ limit: "20mb" }));
   }
 
