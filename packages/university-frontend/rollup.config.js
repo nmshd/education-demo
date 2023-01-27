@@ -22,7 +22,7 @@ function serve() {
       server = require("child_process").spawn("npm", ["run", "start", "--", "--dev"], {
         stdio: ["ignore", "inherit", "inherit"],
         shell: true,
-        cwd: "../server"
+        cwd: "../university-server"
       });
 
       process.on("SIGTERM", toExit);

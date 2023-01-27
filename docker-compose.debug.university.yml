@@ -1,0 +1,34 @@
+version: "3.7"
+
+services:
+  website-university:
+    build:
+      dockerfile: Dockerfile.debug
+      context: .
+    entrypoint: npm run dev --workspace packages/university-frontend
+    container_name:  website-university
+    ports:
+      - 2903:2999
+      - 35729:35727
+    volumes:
+      - ./:/usr/app/
+    restart: always
+    depends_on:
+      - mongodb
+      - connector-demo
+      - keycloak
+    environment:
+      - NODE_CONFIG_ENV=development_demo
+
+  connector-university:
+    container_name: connector-university
+    image: ghcr.io/nmshd/connector:3.2.3
+    environment:
+      CUSTOM_CONFIG_LOCATION: "/config.json"
+      logging__appenders__console__level: "TRACE"
+    ports:
+      - 8013:80
+    volumes:
+      - ./config/connector-university-config.json:/config.json:ro
+    depends_on:
+      - mongodb

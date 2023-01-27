@@ -22,7 +22,7 @@
     },
     "session": {
       "secret": "abc",
-      "name": "connect.sid",
+      "name": "uni.sid",
       "resave": false,
       "saveUninitialized": false
     },
@@ -41,7 +41,7 @@
   },
   "keycloak": {
     "baseUrl": "http://keycloak:8080",
-    "realm": "demo",
+    "realm": "university",
     "client": "demo-client",
     "admin": {
       "username": "admin",
@@ -49,8 +49,8 @@
     }
   },
   "connector": {
-    "name": "Login Demo Connector",
-    "url": "http://connector-demo",
+    "name": "University Connector",
+    "url": "http://connector-university",
     "apiKey": "xxx"
   },
   "otp": {
