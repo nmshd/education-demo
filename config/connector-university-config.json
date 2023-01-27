@@ -1,0 +1,53 @@
+{
+  "transportLibrary": {
+    "baseUrl": "https://bird.enmeshed.eu",
+    "platformClientId": "dev",
+    "platformClientSecret": "SY3nxukl6Xn8kGDk52EwBKXZMR9OR5"
+  },
+  "database": {
+    "connectionString": "mongodb://root:example@mongodb:27017/?authSource=admin&readPreference=primary&appname=DyfeCore&ssl=false",
+    "dbName": "university"
+  },
+  "infrastructure": {
+    "httpServer": {
+      "apiKey": "xxx"
+    }
+  },
+  "modules": {
+    "sync": {
+      "enabled": true,
+      "interval": 1
+    },
+    "webhooksV2": {
+      "enabled": true,
+      "targets": {
+        "website_relationship": {
+          "url": "http://website-university:2999/api/v1/webhooks/enmeshed/relationship",
+          "headers": { "X-API-KEY": "xxx" }
+        },
+        "website_message": {
+          "url": "http://website-university:2999/api/v1/webhooks/enmeshed/message",
+          "headers": { "X-API-KEY": "xxx" }
+        },
+        "request_status_changed": {
+          "url": "http://website-university:2999/api/v1/webhooks/enmeshed/requestChanged",
+          "headers": { "X-API-KEY": "xxx" }
+        }
+      },
+      "webhooks": [
+        {
+          "triggers": ["consumption.outgoingRequestCreatedAndCompleted"],
+          "target": "website_relationship"
+        },
+        {
+          "triggers": ["consumption.outgoingRequestStatusChanged"],
+          "target": "request_status_changed"
+        },
+        {
+          "triggers": ["transport.messageReceived"],
+          "target": "website_message"
+        }
+      ]
+    }
+  }
+}

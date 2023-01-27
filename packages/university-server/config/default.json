@@ -22,7 +22,7 @@
     },
     "session": {
       "secret": "abc",
-      "name": "demo.sid",
+      "name": "uni.sid",
       "resave": false,
       "saveUninitialized": false
     },
@@ -41,7 +41,7 @@
   },
   "keycloak": {
     "baseUrl": "http://keycloak:8080",
-    "realm": "demo",
+    "realm": "university",
     "client": "demo-client",
     "admin": {
       "username": "admin",
@@ -49,8 +49,8 @@
     }
   },
   "connector": {
-    "name": "Login Demo Connector",
-    "url": "http://connector-demo",
+    "name": "University Connector",
+    "url": "http://connector-university",
     "apiKey": "xxx"
   },
   "otp": {
@@ -66,11 +66,17 @@
       "confidential-port": 0
     },
     "config": {
-      "companyName": "Login Demo",
+      "companyName": "Hochschule",
       "registration": true,
       "authorization": true,
       "open": [],
-      "main": [],
+      "main": [
+        {
+          "name": "Bewerbung",
+          "link": "#/application",
+          "icon": "info-circle"
+        }
+      ],
       "profile": [],
       "template": {},
       "userData": {
@@ -80,10 +86,7 @@
           { "name": "firstName", "type": "text" },
           { "name": "lastName", "type": "text" }
         ],
-        "opt": [
-          { "name": "email", "type": "email" },
-          { "name": "phone", "type": "tel" }
-        ]
+        "opt": [{ "name": "email", "type": "email" }]
       },
       "enmeshedIntro": {
         "title": "What is Enmeshed exactly?",

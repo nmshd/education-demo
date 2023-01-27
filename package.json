@@ -8,7 +8,9 @@
     "packages/lib",
     "packages/demo-frontend",
     "packages/school-frontend",
-    "packages/school-server"
+    "packages/school-server",
+    "packages/university-frontend",
+    "packages/university-server"
   ],
   "scripts": {
     "build": "npm run build --workspaces",
@@ -17,10 +19,11 @@
     "lint": "npm run lint:prettier && npm run lint:eslint",
     "lint:eslint": "npx eslint --ext .ts,.svelte,.js,.d.ts ./packages/demo-frontend/src ./packages/school-frontend/src ./packages/school-server/src ./packages/server/src ./packages/lib/src",
     "lint:prettier": "prettier --check .",
-    "start": "docker compose -f docker-compose.debug.yml -f docker-compose.debug.school.yml -f docker-compose.debug.demo.yml up -d",
+    "start": "docker compose -f docker-compose.debug.yml -f docker-compose.debug.school.yml -f docker-compose.debug.demo.yml -f docker-compose.debug.university.yml up -d",
     "start:demo": "docker compose -f docker-compose.debug.yml -f docker-compose.debug.demo.yml up -d",
     "start:school": "docker compose -f docker-compose.debug.yml -f docker-compose.debug.school.yml up -d",
-    "stop": "docker compose -f docker-compose.debug.yml -f docker-compose.debug.school.yml -f docker-compose.debug.demo.yml down"
+    "start:university": "docker compose -f docker-compose.debug.yml -f docker-compose.debug.university.yml up -d",
+    "stop": "docker compose -f docker-compose.debug.yml -f docker-compose.debug.school.yml -f docker-compose.debug.demo.yml -f docker-compose.debug.university.yml down"
   },
   "devDependencies": {
     "@js-soft/eslint-config-ts": "1.5.2",

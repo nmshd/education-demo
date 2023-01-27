@@ -22,7 +22,7 @@
     },
     "session": {
       "secret": "abc",
-      "name": "connect.sid",
+      "name": "school.sid",
       "resave": false,
       "saveUninitialized": false
     },

@@ -43,6 +43,27 @@ services:
     depends_on:
       - mongodb
 
+  website-university:
+    build: .
+    container_name: website-university
+    ports:
+      - 2903:2999
+    working_dir: "/usr/app/university"
+    depends_on:
+      - mongodb
+      - keycloak
+      - connector-university
+
+  connector-university:
+    container_name: connector-university
+    image: ghcr.io/nmshd/connector:3.2.3
+    environment:
+      CUSTOM_CONFIG_LOCATION: "/config.json"
+    volumes:
+      - ./config/connector-university-config.json:/config.json:ro
+    depends_on:
+      - mongodb
+
   mongodb:
     container_name: mongodb
     image: mongo

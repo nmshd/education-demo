@@ -27,4 +27,13 @@ RUN npm install
 COPY --from=builder /usr/app/packages/school-server/public/ public/
 COPY --from=builder /usr/app/packages/school-server/dist/ dist/
 
+# university
+WORKDIR /usr/app/university
+COPY packages/university-server/package.json ./
+COPY packages/university-server/config config
+RUN npm install
+
+COPY --from=builder /usr/app/packages/university-server/public/ public/
+COPY --from=builder /usr/app/packages/university-server/dist/ dist/
+
 ENTRYPOINT [ "node", "dist/index.js" ]
