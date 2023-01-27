@@ -9,7 +9,6 @@ import { createProxyMiddleware } from "http-proxy-middleware";
 import mongoose from "mongoose";
 import { Server } from "socket.io";
 import { configRouting } from "./routing";
-import { nmshdMagic } from "./routing/enmeshedMagicModel";
 import { extractSessionId, handleConnect, handleDisconnect } from "./routing/sessionHelper";
 
 interface ServerToClientEvents {
@@ -117,9 +116,8 @@ export class EnmeshedLoginDemoServer {
         handleConnect(connectSId, socket);
       }
 
-      socket.on("disconnect", async function () {
+      socket.on("disconnect", function () {
         if (connectSId) {
-          await nmshdMagic.deleteMany({ sessionID: connectSId });
           handleDisconnect(connectSId, socket.id);
         }
       });

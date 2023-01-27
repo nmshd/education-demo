@@ -27,10 +27,6 @@ export function configRouting(s: EnmeshedLoginDemoServer): void {
   privateRouter.initialize();
   // If there are additional Private Routes in ./routing/PrivateRoutes.ts add them here like
   // privateRouter.router.get("xxx", PrivateRoutes.xxx);
-  privateRouter.router.post("/genericDB", PrivateRoutes.writeInDb);
-  privateRouter.router.get("/genericDB", PrivateRoutes.readFromDb);
-  privateRouter.router.delete("/genericDB", PrivateRoutes.deleteFromDb);
-  privateRouter.router.patch("/genericDB", PrivateRoutes.updateDb);
   privateRouter.router.post("/sendApplicationRequest", PrivateRoutes.sendApplicationRequest);
   privateRouter.router.post("/sendDemoMessageToUser", PrivateRoutes.sendMessageToUser);
 
