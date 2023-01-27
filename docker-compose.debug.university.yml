@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile.debug
       context: .
     entrypoint: npm run dev --workspace packages/university-frontend
-    container_name:  website-university
+    container_name: website-university
     ports:
       - 2903:2999
       - 35729:35727
