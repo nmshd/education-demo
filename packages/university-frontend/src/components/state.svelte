@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Bewerbung from "./bewerbung.svelte";
+  import Application from "./application.svelte";
   import Final from "./final.svelte";
   import Landing from "./landing.svelte";
-  const state: any[] = [Landing, Bewerbung, Final];
+  const state: any[] = [Landing, Application, Final];
 
   export let stateIndex: number;
 
