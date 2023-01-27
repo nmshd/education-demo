@@ -25,7 +25,6 @@ services:
     image: ghcr.io/nmshd/connector:3.2.3
     environment:
       CUSTOM_CONFIG_LOCATION: "/config.json"
-      logging__appenders__console__level: "TRACE"
     ports:
       - 8013:80
     volumes:
