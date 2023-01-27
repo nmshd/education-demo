@@ -1,0 +1,35 @@
+{
+  "name": "@js-soft/nmshd-login-demo-fe-default",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "rollup -c",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "dev": "rollup -c -w"
+  },
+  "dependencies": {
+    "@js-soft/nmshd-login-demo-helper": "*",
+    "@rollup/plugin-typescript": "^8.3.1",
+    "axios": "^0.26.0",
+    "keycloak-js": "^17.0.0",
+    "qs": "^6.10.3",
+    "socket.io-client": "^4.4.1",
+    "svelte-spa-router": "^3.2.0",
+    "sveltestrap": "^5.9.0"
+  },
+  "devDependencies": {
+    "@js-soft/eslint-config-ts": "^1.5.1",
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.0.0",
+    "@rollup/plugin-typescript": "^8.0.0",
+    "@tsconfig/svelte": "^2.0.0",
+    "rollup": "^2.3.4",
+    "rollup-plugin-css-only": "^3.1.0",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-svelte": "^7.0.0",
+    "rollup-plugin-terser": "^7.0.0",
+    "svelte": "^3.0.0",
+    "svelte-check": "^2.0.0",
+    "svelte-preprocess": "^4.0.0"
+  }
+}
