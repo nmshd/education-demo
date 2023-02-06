@@ -37,7 +37,7 @@ export default {
     sourcemap: true,
     format: "es",
     name: "app",
-    dir: "../server/public/build/",
+    dir: "../university-server/public/build/",
     manualChunks: (moduleName) => {
       if (moduleName.includes("node_modules")) {
         return "vendor";
@@ -81,7 +81,7 @@ export default {
 
     // Watch the `public` directory and refresh the
     // browser on changes when not in production
-    !production && livereload({ watch: "../server/public", port: 35727 }),
+    !production && livereload({ watch: "../university-server/public", port: 35727 }),
 
     // If we're building for production (npm run build
     // instead of npm run dev), minify
