@@ -13,8 +13,9 @@ import { extractSessionId, handleConnect, handleDisconnect } from "./routing/ses
 
 interface ServerToClientEvents {
   register(token: object): void;
+  onboard(token: object): void;
+  onboard(application: object): void;
   error(error: string): void;
-  asd(error: string): void;
 }
 
 interface ClientToServerEvents {}
@@ -64,7 +65,7 @@ export class EnmeshedLoginDemoServer {
         store: this.store,
         secret: config.get("server.session.secret"),
         name: config.get("server.session.name"),
-        resave: true,
+        resave: false,
         cookie: { maxAge: 60000000000000 }
       });
       this.app.use(this.session);

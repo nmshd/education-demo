@@ -58,7 +58,7 @@
   },
   "site": {
     "keycloak": {
-      "realm": "demo",
+      "realm": "university",
       "auth-server-url": "/kc/",
       "ssl-required": "external",
       "resource": "demo-client",

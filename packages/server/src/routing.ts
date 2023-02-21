@@ -6,6 +6,12 @@ import { PrivateRouter } from "./routing/PrivateRouter";
 import { PrivateRoutes } from "./routing/PrivateRoutes";
 import { PublicRouter } from "./routing/PublicRouter";
 import { PublicRoutes } from "./routing/PublicRoutes";
+import {
+  extractSessionId,
+  getSocketFromCookie,
+  handleConnect,
+  handleDeprecatedSessionId
+} from "./routing/sessionHelper";
 
 export function configRouting(s: EnmeshedLoginDemoServer): void {
   const publicRouter = new PublicRouter();
@@ -21,6 +27,34 @@ export function configRouting(s: EnmeshedLoginDemoServer): void {
   publicRouter.router.post("/sendMessage", PublicRoutes.sendMessage);
 
   s.app.use("/api/v1", publicRouter.router);
+
+  // If the session get's overriden by a successful login attempt, we need to update our socket maps to still be able to find them by session.
+  s.app.use(function (req, res, next) {
+    res.on("finish", () => {
+      if (res.hasHeader("Set-Cookie")) {
+        const newSession = res.getHeader("Set-Cookie");
+        const sessionString = newSession?.toString();
+        const oldSession = extractSessionId(req);
+
+        if (sessionString?.includes(config.get("server.session.name")) && oldSession) {
+          const socket = getSocketFromCookie(oldSession);
+          if (socket) {
+            const pairs = sessionString.split(";");
+            const splittedPairs = pairs.filter((el) => el.includes("=")).map((cookie) => cookie.split("="));
+            const cookieObj = splittedPairs.reduce(function (obj: any, cookie) {
+              obj[decodeURIComponent(cookie[0].trim())] = decodeURIComponent(cookie[1].trim());
+              return obj;
+            }, {});
+            const newSession = cookieObj[`${config.get("server.session.name")}`];
+
+            handleDeprecatedSessionId(oldSession);
+            handleConnect(newSession, socket);
+          }
+        }
+      }
+    });
+    next();
+  });
 
   const privateRouter = new PrivateRouter();
   privateRouter.initialize();

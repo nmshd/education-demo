@@ -36,6 +36,13 @@
     }
   }
 
+  function padNumber(d: number | undefined): string {
+    if (!d) {
+      return "";
+    }
+    return d < 10 ? `0${d.toString()}` : d.toString();
+  }
+
   onMount(async () => {
     await startOnboarding();
   });
@@ -61,7 +68,9 @@
           type="date"
           name="Geburtsdatum"
           value={$application.birthDate
-            ? `${$application.birthDate.year}-${$application.birthDate.month}-${$application.birthDate.day}`
+            ? `${$application.birthDate.year}-${padNumber($application.birthDate.month)}-${padNumber(
+                $application.birthDate.day
+              )}`
             : ""}
         />
       </FormGroup>
@@ -73,9 +82,9 @@
       </FormGroup>
       <FormGroup floating label="Geschlecht*">
         <select id="gender" class="form-select form-select-sm" aria-label=".form-select-sm example" required>
-          <option value="M">Männlich</option>
-          <option value="W">Weiblich</option>
-          <option value="D">Divers</option>
+          <option value="M" selected={$application.sex === "male"}>Männlich</option>
+          <option value="W" selected={$application.sex === "female"}>Weiblich</option>
+          <option value="D" selected={$application.sex === "intersex"}>Divers</option>
         </select>
       </FormGroup>
       <FormGroup floating label="E-Mail">

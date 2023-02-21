@@ -92,7 +92,7 @@ export async function createRegistrationQRCode(
         "@type": "ProposeAttributeRequestItem",
         attribute: {
           "@type": "IdentityAttribute",
-          owner: identity.address,
+          owner: "",
           value: {
             "@type": `${translationMap[element.name]?.valueType}`,
             value: proposedValue
@@ -123,7 +123,7 @@ export async function createRegistrationQRCode(
         "@type": "ProposeAttributeRequestItem",
         attribute: {
           "@type": "IdentityAttribute",
-          owner: identity.address,
+          owner: "",
           value: {
             "@type": `${translationMap[optionalElement.name]?.valueType}`,
             value: proposedValue
@@ -149,21 +149,21 @@ export async function createRegistrationQRCode(
 
   const createObject: ConnectorRequestContentItemGroup = {
     "@type": "RequestItemGroup",
-    mustBeAccepted: true,
+    mustBeAccepted: createItems.some((el) => el.mustBeAccepted),
     title: "Shared Attributes",
     items: createItems
   };
 
   const proposedObject: ConnectorRequestContentItemGroup = {
     "@type": "RequestItemGroup",
-    mustBeAccepted: true,
+    mustBeAccepted: proposedItems.some((el) => el.mustBeAccepted),
     title: "Requested Attributes",
     items: proposedItems
   };
 
   const requestObject: ConnectorRequestContentItemGroup = {
     "@type": "RequestItemGroup",
-    mustBeAccepted: true,
+    mustBeAccepted: requestItems.some((el) => el.mustBeAccepted),
     title: "Requested Attributes",
     items: requestItems
   };

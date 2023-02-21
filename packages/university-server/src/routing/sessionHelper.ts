@@ -43,6 +43,11 @@ export function handleConnect(connectSId: string, socket: Socket): void {
   cookieToSocket.set(connectSId, socket);
 }
 
+export function handleDeprecatedSessionId(sessionId: string): void {
+  cookieToSocket.delete(sessionId);
+  adminCookieToSocket.delete(sessionId);
+}
+
 export function handleDisconnect(sessionId: string, socketId: string): void {
   cookieToSocket.delete(sessionId);
   adminCookieToSocket.delete(sessionId);
