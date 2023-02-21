@@ -294,7 +294,11 @@ async function onboardingRegistration(
       const user = await KeycloakHelper.getUser(userData.userName);
       const keycloakTokens = await KeycloakHelper.impersonate(user!.id);
 
-      socket?.emit("onboard", keycloakTokens);
+      if (socket) {
+        socket.emit("onboard", keycloakTokens);
+      } else {
+        console.log("could not find socket");
+      }
     }
   } else {
     await CONNECTOR_CLIENT.relationships.rejectRelationshipChange(relationshipId, changeId);
@@ -374,7 +378,10 @@ function getUserData(
 
   for (const entry of entries) {
     for (const item of entry.items) {
-      if (item["@type"] === "ReadAttributeAcceptResponseItem") {
+      if (
+        item["@type"] === "ReadAttributeAcceptResponseItem" ||
+        item["@type"] === "ProposeAttributeAcceptResponseItem"
+      ) {
         const el: any = (item as any).attribute;
         if (el?.value) {
           if (!attr.enmeshedAddress) {
