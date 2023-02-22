@@ -46,9 +46,7 @@
             authorization: `Bearer ${keycloakTokens.access_token}`
           }
         });
-        // This call is needed to make the session persistant if the user imedatiely leaves the site and returns.
-        // TODO: Why do we need this/how do we fix this?
-        await axios.get("api/v1/session");
+
         userInfo.set(u.data);
         loggedIn.set(true);
         await push(`${parsed.redirect ?? "/"}`);
