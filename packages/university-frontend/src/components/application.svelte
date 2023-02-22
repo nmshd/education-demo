@@ -1,6 +1,7 @@
 <script lang="ts">
   import axios from "axios";
   import { onMount } from "svelte";
+  import { replace } from "svelte-spa-router";
   import { Button, FormGroup, Image, Input, Progress } from "sveltestrap";
   import { application, applicationRequestStatus, Status, userInfo } from "../store";
   export let stateIndex: number;
@@ -110,7 +111,7 @@
       <br />
 
       <FormGroup>
-        <Button type="submit" color="primary" block on:click={() => stateIndex++}>Weiter</Button>
+        <Button type="submit" color="primary" block on:click={async () => await replace("/final")}>Weiter</Button>
       </FormGroup>
     </form>
   </div>

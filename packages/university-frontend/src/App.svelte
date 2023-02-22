@@ -3,10 +3,8 @@
   import axios from "axios";
   import { parse } from "qs";
   import { onMount } from "svelte";
-  import Router, { push, querystring } from "svelte-spa-router";
+  import Router, { location, push, querystring, replace } from "svelte-spa-router";
   import { Container, Styles } from "sveltestrap";
-  import Index from "./components/index.svelte";
-  import State from "./components/state.svelte";
   import { io } from "./lib/realtime";
   import { routes } from "./lib/routes.svelte";
   import {
@@ -20,7 +18,7 @@
   } from "./store";
   $: parsed = parse($querystring!);
 
-  let stateIndex = 0;
+  console.log($location);
 
   onMount(async () => {
     try {
@@ -85,22 +83,31 @@
 
 <main>
   <div class="story-container">
-    <div class="sidebar" style="width:25%"><Index index={stateIndex} /></div>
     <div class="story-content">
       {#if $siteConfig && $userInfo}
         {#if $loggedIn !== undefined}
           <Container>
             {#if $loggedIn}
               <NavbarLoggedIn userName={$userInfo.preferred_username} {siteConfig} />
-              <div class="row align-self-center">
-                <State bind:stateIndex />
-              </div>
             {:else}
               <NavbarLoggedOut {siteConfig} />
-              <div class="row align-self-center">
-                <Router {routes} />
-              </div>
             {/if}
+            <div class="row align-self-center">
+              <div class={$location !== "/login" && $location !== "/register" ? "story" : ""}>
+                <div class={$location !== "/login" && $location !== "/register" ? "story-content" : ""}>
+                  <Router
+                    {routes}
+                    on:conditionsFailed={async (event) => {
+                      if (event.detail.route === "/login" || event.detail.route === "/register") {
+                        await replace("/");
+                      } else {
+                        await replace(`/login?redirect=${event.detail.route !== "*" ? event.detail.route : "/"}`);
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
           </Container>
         {/if}
       {/if}
@@ -115,11 +122,18 @@
     height: 100%;
   }
 
-  .sidebar {
-    border-right: 6px solid black;
-    flex: 15%;
-    background-color: lightgray;
-    padding: 2em;
+  .story {
+    position: relative;
+    min-height: 800px;
+    height: 100%;
+  }
+
+  .story-content {
+    position: relative;
+    max-height: 90%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
   }
 
   .story-container {
@@ -133,12 +147,6 @@
     position: relative;
     flex: 85%;
     padding: 0 2em;
-  }
-
-  .story-state {
-    height: 95%;
-    min-height: 800px;
-    min-width: 600px;
   }
 
   @media (min-width: 640px) {
