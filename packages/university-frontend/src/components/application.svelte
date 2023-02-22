@@ -1,9 +1,9 @@
 <script lang="ts">
   import axios from "axios";
   import { onMount } from "svelte";
+  import { replace } from "svelte-spa-router";
   import { Button, FormGroup, Image, Input, Progress } from "sveltestrap";
   import { application, applicationRequestStatus, Status, userInfo } from "../store";
-  export let stateIndex: number;
 
   let imageBuffer: string;
 
@@ -53,7 +53,7 @@
     <h2 class="display-1">Daten zur Person</h2>
     <hr />
 
-    <form>
+    <form on:submit|preventDefault={async () => await replace("/final")}>
       <h3>Persönlicher Daten</h3>
       <br />
       <FormGroup floating label="Vorname*">
@@ -72,13 +72,14 @@
                 $application.birthDate.day
               )}`
             : ""}
+          required
         />
       </FormGroup>
       <FormGroup floating label="Geburtsland*">
-        <Input id="birth_country" name="Geburtsland" value={$application.birthPlace?.country ?? ""} />
+        <Input id="birth_country" name="Geburtsland" value={$application.birthPlace?.country ?? ""} required />
       </FormGroup>
       <FormGroup floating label="Staatsangehörigkeit*">
-        <Input id="nationality" name="Staatsangehörigkeit" value={$application.nationality ?? ""} />
+        <Input id="nationality" name="Staatsangehörigkeit" value={$application.nationality ?? ""} required />
       </FormGroup>
       <FormGroup floating label="Geschlecht*">
         <select id="gender" class="form-select form-select-sm" aria-label=".form-select-sm example" required>
@@ -93,16 +94,16 @@
 
       <h3>Addresse</h3>
       <FormGroup floating label="Straße, Hausnummer*">
-        <Input id="street_num" name="StraßeNummer" value={$application.streetAddress?.houseNumber ?? ""} />
+        <Input id="street_num" name="StraßeNummer" value={$application.streetAddress?.houseNumber ?? ""} required />
       </FormGroup>
       <FormGroup floating label="PLZ*">
-        <Input id="zip" name="PLZ" value={$application.streetAddress?.zipCode ?? ""} />
+        <Input id="zip" name="PLZ" value={$application.streetAddress?.zipCode ?? ""} required />
       </FormGroup>
       <FormGroup floating label="Ort*">
-        <Input id="place" name="Ort" value={$application.streetAddress?.city ?? ""} />
+        <Input id="place" name="Ort" value={$application.streetAddress?.city ?? ""} required />
       </FormGroup>
       <FormGroup floating label="Land*">
-        <Input id="country" name="Land" value={$application.streetAddress?.country ?? ""} />
+        <Input id="country" name="Land" value={$application.streetAddress?.country ?? ""} required />
       </FormGroup>
       <FormGroup floating label="Telefon">
         <Input id="telefone" name="Telefon" value={$application.phoneNumber ?? ""} />
@@ -110,7 +111,7 @@
       <br />
 
       <FormGroup>
-        <Button type="submit" color="primary" block on:click={() => stateIndex++}>Weiter</Button>
+        <Button type="submit" color="primary" block>Weiter</Button>
       </FormGroup>
     </form>
   </div>

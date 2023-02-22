@@ -3,7 +3,6 @@
   import { onMount } from "svelte";
   import { Button, Container, Image } from "sveltestrap";
   import { userInfo } from "../store";
-  export let stateIndex: number;
 
   let imageBuffer: string;
 
@@ -73,11 +72,6 @@
     font-weight: bold;
   }
 
-  h3 {
-    color: #0158ab;
-    font-size: 20px;
-  }
-
   .update {
     padding: 24px;
     top: 10vh;
@@ -89,9 +83,5 @@
     width: 66%;
     padding: 0 18px;
     margin: auto;
-  }
-
-  a {
-    color: white;
   }
 </style>
