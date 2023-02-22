@@ -7,9 +7,7 @@
 <Container>
   <h1 class="display-1">Hello {$userInfo.given_name ? $userInfo.given_name : $userInfo.preferred_username}</h1>
   <div>
-    Starte deine Bewerbung zur Immatrikulation für das Fach Bachelor of Science Informatik an der Muster <a
-      href="https://www.google.com">Hochschule</a
-    >.
+    Starte deine Bewerbung zur Immatrikulation für das Fach Bachelor of Science Informatik an der Muster Hochschule.
     <br /><Button color="primary" on:click={async () => await replace("/application")}>Start</Button>
   </div></Container
 >
