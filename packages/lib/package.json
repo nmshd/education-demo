@@ -18,7 +18,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "axios": "^0.26.0",
+    "axios": "^1.6.7",
     "svelte-spa-router": "^3.2.0",
     "sveltestrap": "^5.9.0"
   },
