@@ -22,10 +22,13 @@ services:
 
   connector-demo:
     container_name: connector-demo
-    image: ghcr.io/nmshd/connector:3.2.3
+    image: ghcr.io/nmshd/connector:3.10.1
     environment:
-      CUSTOM_CONFIG_LOCATION: "/config.json"
-      logging__appenders__console__level: "TRACE"
+      - CUSTOM_CONFIG_LOCATION=/config.json
+      - logging__appenders__console__level=TRACE
+      - transportLibrary__baseUrl
+      - transportLibrary__platformClientId
+      - transportLibrary__platformClientSecret
     ports:
       - 8012:80
     volumes:

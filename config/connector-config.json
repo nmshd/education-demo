@@ -1,9 +1,4 @@
 {
-  "transportLibrary": {
-    "baseUrl": "https://bird.enmeshed.eu",
-    "platformClientId": "dev",
-    "platformClientSecret": "SY3nxukl6Xn8kGDk52EwBKXZMR9OR5"
-  },
   "database": {
     "connectionString": "mongodb://root:example@mongodb:27017/?authSource=admin&readPreference=primary&appname=DyfeCore&ssl=false",
     "dbName": "nmshd"
