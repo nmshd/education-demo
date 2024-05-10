@@ -1,0 +1,40 @@
+{
+  "database": {
+    "connectionString": "mongodb://root:example@mongodb:27017/?authSource=admin&readPreference=primary&appname=DyfeCore&ssl=false",
+    "dbName": "nmshd"
+  },
+  "infrastructure": {
+    "httpServer": {
+      "apiKey": "xxx"
+    }
+  },
+  "modules": {
+    "sync": {
+      "enabled": true,
+      "interval": 1
+    },
+    "webhooksV2": {
+      "enabled": true,
+      "targets": {
+        "website_relationship": {
+          "url": "http://website:2999/api/v1/webhooks/enmeshed/relationship",
+          "headers": { "X-API-KEY": "xxx" }
+        },
+        "website_message": {
+          "url": "http://website:2999/api/v1/webhooks/enmeshed/message",
+          "headers": { "X-API-KEY": "xxx" }
+        }
+      },
+      "webhooks": [
+        {
+          "triggers": ["transport.relationshipChanged"],
+          "target": "website_relationship"
+        },
+        {
+          "triggers": ["transport.messageReceived"],
+          "target": "website_message"
+        }
+      ]
+    }
+  }
+}
